@@ -1,6 +1,8 @@
+import createHomePage from './components/pages/Home'
+
 const createRoutes = React => ([
   {
-    component: null,
+    component: createHomePage(React),
     path: '/',
     name: 'home',
   }
