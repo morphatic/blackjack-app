@@ -3,9 +3,7 @@ import * as colors from '@material-ui/core/colors'
 import felt from './assets/felt.png'
 
 export default createMuiTheme({
-  // background: {
-  //   default: 'radial-gradient(circle, rgba(53,101,77,1) 56%, rgba(27,71,49,1) 100%)',
-  // },
+  themeName: 'Blackjack',
   overrides: {
     MuiCssBaseline: {
       '@global': {
@@ -37,9 +35,6 @@ export default createMuiTheme({
     warning: {
       main: colors.deepOrange[800],
     },
-    // background: {
-    //   default: colors.blueGrey[50],
-    // },
   },
   typography: {
     body1: {
