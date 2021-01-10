@@ -1,0 +1,10 @@
+{
+  "pages": {
+    "home": {
+      "blackjack": "BLACKJACK",
+      "join": "Join a Game",
+      "placeholder": "your email address",
+      "teaser": "Wanna play? Enter your email address to get started!"
+    }
+  }
+}

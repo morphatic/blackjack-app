@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/core/styles'
 import createApp from './App'
+import './i18n'
 import theme from './theme'
 
 const App = createApp(React)

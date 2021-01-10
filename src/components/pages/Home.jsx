@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Button, CardMedia, Paper, SvgIcon, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import logo from '../../assets/android-chrome-192x192.png'
 import { mdiCardsSpade } from '@mdi/js'
+import { useTranslation } from 'react-i18next'
+import logo from '../../assets/android-chrome-192x192.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,6 +57,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const createHomePage = React => () => {
+  const { t } = useTranslation()
   const classes = useStyles()
   const [email, setEmail] = useState('')
   return (
@@ -66,20 +68,20 @@ const createHomePage = React => () => {
       title="Blackjack Logo"
     />
     <Typography variant="h1" align="center">
-      BLACKJACK
+      {t('pages.home.blackjack')}
     </Typography>
     <Typography
       className={classes.text}
       variant="body1"
       align="center"
     >
-      Wanna play? Enter your email address to get started!
+      {t('pages.home.teaser')}
     </Typography>
     <form className={classes.form}>
       <TextField
         className={classes.textField}
         onChange={e => setEmail(e.target.value)}
-        placeholder="your email address"
+        placeholder={t('pages.home.placeholder')}
         value={email}
         variant="outlined"
       />
@@ -90,7 +92,7 @@ const createHomePage = React => () => {
         endIcon={<SvgIcon><path d={mdiCardsSpade} /></SvgIcon>}
         size="large"
       >
-        Join a Game
+        {t('pages.home.join')}
       </Button>
     </form>
   </Paper>
