@@ -2,9 +2,14 @@
   "pages": {
     "home": {
       "blackjack": "BLACKJACK",
+      "emailRequired": "Email is required",
       "join": "Join a Game",
+      "loginProblem": "There was a problem logging in",
       "placeholder": "your email address",
       "teaser": "Wanna play? Enter your email address to get started!"
+    },
+    "table": {
+      "logout": "Logout"
     }
   }
 }

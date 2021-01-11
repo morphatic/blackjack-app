@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { Button, CardMedia, Paper, SvgIcon, TextField, Typography } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import { Button, CardMedia, IconButton, Paper, SvgIcon, TextField, Typography, Zoom } from '@material-ui/core'
+import { Alert, AlertTitle } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
-import { mdiCardsSpade } from '@mdi/js'
+import { mdiCardsSpade, mdiClose } from '@mdi/js'
 import { useTranslation } from 'react-i18next'
 import logo from '../../assets/android-chrome-192x192.png'
+import { loginUser } from '../../services/magic'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,42 +63,84 @@ const createHomePage = React => () => {
   const { t } = useTranslation()
   const classes = useStyles()
   const [email, setEmail] = useState('')
+  const [alert, setAlert] = useState('')
+  const history = useHistory()
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (!email) {
+      setAlert(t('pages.home.emailRequired'))
+      document.getElementById('email').focus()
+      return
+    }
+    try {
+      setAlert('')
+      await loginUser(email)
+      history.replace('/table')
+    } catch (error) {
+      setAlert(error.message)
+    } 
+  }
   return (
-  <Paper className={classes.root} elevation={0}>
-    <CardMedia
-      className={classes.media}
-      image={logo}
-      title="Blackjack Logo"
-    />
-    <Typography variant="h1" align="center">
-      {t('pages.home.blackjack')}
-    </Typography>
-    <Typography
-      className={classes.text}
-      variant="body1"
-      align="center"
-    >
-      {t('pages.home.teaser')}
-    </Typography>
-    <form className={classes.form}>
-      <TextField
-        className={classes.textField}
-        onChange={e => setEmail(e.target.value)}
-        placeholder={t('pages.home.placeholder')}
-        value={email}
-        variant="outlined"
+    <Paper className={classes.root} elevation={0}>
+      <CardMedia
+        className={classes.media}
+        image={logo}
+        title="Blackjack Logo"
       />
-      <br />
-      <Button
-        className={classes.button}
-        variant="contained"
-        endIcon={<SvgIcon><path d={mdiCardsSpade} /></SvgIcon>}
-        size="large"
+      <Typography variant="h1" align="center">
+        {t('pages.home.blackjack')}
+      </Typography>
+      <Typography
+        className={classes.text}
+        variant="body1"
+        align="center"
       >
-        {t('pages.home.join')}
-      </Button>
-    </form>
-  </Paper>
+        {t('pages.home.teaser')}
+      </Typography>
+      <form
+        className={classes.form}
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          id="email"
+          className={classes.textField}
+          onChange={e => setEmail(e.target.value)}
+          placeholder={t('pages.home.placeholder')}
+          type="email"
+          value={email}
+          variant="outlined"
+        />
+        <br />
+        <Button
+          className={classes.button}
+          endIcon={<SvgIcon><path d={mdiCardsSpade} /></SvgIcon>}
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          {t('pages.home.join')}
+        </Button>
+      </form>
+      <Zoom in={!!alert}>
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {setAlert('')}}
+            >
+              <SvgIcon><path d={mdiClose} /></SvgIcon>
+            </IconButton>
+          }
+          severity="error"
+          variant="filled"
+        >
+          <AlertTitle>{t('pages.home.loginProblem')}</AlertTitle>
+          {alert}
+        </Alert>
+      </Zoom>
+    </Paper>
   )
 }
 

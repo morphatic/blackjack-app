@@ -2,9 +2,14 @@
   "pages": {
     "home": {
       "blackjack": "ブラックジャック",
+      "emailRequired": "メールアドレスがひつようです",
       "join": "ゲーム入ろう",
+      "loginProblem": "ログインにえらーがありました",
       "placeholder": "メールアドレス",
       "teaser": "やってみたい？メール住所を入力して始めましょう！"
     }
+  },
+  "table": {
+    "logout": "ログアウト"
   }
 }
