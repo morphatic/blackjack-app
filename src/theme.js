@@ -41,8 +41,5 @@ export default createMuiTheme({
       fontFamily: 'Raleway, sans-serif',
       fontWeight: 600,
     },
-    h1: {
-      fontFamily: '"Diplomata SC", cursive',
-    },
   },
 })

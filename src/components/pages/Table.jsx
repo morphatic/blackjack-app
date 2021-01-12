@@ -1,18 +1,19 @@
-import { useContext } from "react"
-import { useHistory } from "react-router-dom"
-import { useTranslation } from 'react-i18next'
-import { Button, Paper, SvgIcon } from "@material-ui/core"
+import { useContext, useState } from 'react'
+// import { useTranslation } from 'react-i18next'
+import { Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { mdiLogout } from '@mdi/js'
-import { AuthContext } from "../../contexts/AuthContext"
-import { logoutUser } from "../../services/magic"
+import { AuthStateContext } from '../../contexts/AuthContext'
+import { defaultGameContext, GameDispatchContext, GameStateContext } from '../../contexts/GameContext'
+import createWelcomeDialog from '../notifications/WelcomeDialog'
+import createTableLayout from '../misc/TableLayout'
 
 const useStyles = makeStyles(theme => ({
   root: {
+    alignItems: 'center',
     background: 'transparent',
-    height: '90vh',
     display: 'flex',
     flexDirection: 'column',
+    height: '90vh',
     justifyContent: 'center',
   },
   button: {
@@ -25,7 +26,6 @@ const useStyles = makeStyles(theme => ({
     '& .MuiSvgIcon-root': {
       height: '2rem',
       marginLeft: '0.5rem',
-      transform: 'rotate(90deg)',
       width: '2rem',
     },
     '&:hover': {
@@ -38,33 +38,20 @@ const useStyles = makeStyles(theme => ({
 
 const createTablePage = React => () => {
   const classes = useStyles()
-  const { email } = useContext(AuthContext)
-  const history = useHistory()
-  const { t } = useTranslation()
-  const handleLogout = async () => {
-    try {
-      await logoutUser()
-      history.replace('/')
-    } catch (error) {
-      // TODO: replace with proper Alert
-      console.log(error)
-    }
-  }
+  const { player } = useContext(AuthStateContext)
+  const [game, setGame] = useState(defaultGameContext)
+  // const { t } = useTranslation()
+  const WelcomeDialog = createWelcomeDialog()
+  const TableLayout = createTableLayout()
   return (
-    <Paper className={classes.root} elevation={0}>
-      <Button
-        className={classes.button}
-        variant="contained"
-        endIcon={<SvgIcon><path d={mdiLogout} /></SvgIcon>}
-        onClick={handleLogout}
-        size="large"
-      >
-        {t('pages.table.logout')}
-      </Button>
-      <p>
-        Hello, {email}!
-      </p>
-    </Paper>
+    <GameStateContext.Provider value={game}>
+      <GameDispatchContext.Provider value={setGame}>
+        <Paper className={classes.root} elevation={0}>
+          <TableLayout />
+          <WelcomeDialog open={player.name === ''} />
+        </Paper>
+      </GameDispatchContext.Provider>
+    </GameStateContext.Provider>
   )
 }
 

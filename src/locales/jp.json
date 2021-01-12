@@ -1,15 +1,35 @@
 {
+  "header": {
+    "blackjack": "ブラックジャック"
+  },
   "pages": {
     "home": {
-      "blackjack": "ブラックジャック",
       "emailRequired": "メールアドレスがひつようです",
       "join": "ゲーム入ろう",
       "loginProblem": "ログインにえらーがありました",
       "placeholder": "メールアドレス",
       "teaser": "やってみたい？メール住所を入力して始めましょう！"
+    },
+    "table": {
+      "logout": "ログアウト"
     }
   },
-  "table": {
-    "logout": "ログアウト"
-  }
+  "notifications": {
+    "welcome-dialog": {
+      "message": "ご参加いただきありがとうございます！お名前を教えてください。名は大丈夫です-それはテーブルであなたのスポットにラベルを付けることができるようにするためです。",
+      "placeholder": "名前",
+      "submit": "参加",
+      "title": "ブラックジャックへようこそ!"
+    }
+  },
+  "misc": {
+    "dealer-rules": {
+      "hit": "ディーラーがソフト17にヒット",
+      "stand": "ディーラーは16に引き、17のすべてに立つ必要があります"
+    },
+    "house-payout": {
+      "3to2": "ハウスは２に３払う",
+      "6to5": "ハウスは５に６払う"
+    }
+  } 
 }
