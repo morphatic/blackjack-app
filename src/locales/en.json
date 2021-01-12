@@ -1,7 +1,9 @@
 {
+  "header": {
+    "blackjack": "BLACKJACK"
+  },
   "pages": {
     "home": {
-      "blackjack": "BLACKJACK",
       "emailRequired": "Email is required",
       "join": "Join a Game",
       "loginProblem": "There was a problem logging in",
@@ -11,5 +13,23 @@
     "table": {
       "logout": "Logout"
     }
-  }
+  },
+  "notifications": {
+    "welcome-dialog": {
+      "message": "Thank you for joining! Please let us know your name. First name is fine--it's just so we can label your spot(s) at the table.",
+      "placeholder": "your name",
+      "submit": "Submit",
+      "title": "Welcome to Blackjack!"
+    }
+  },
+  "misc": {
+    "dealer-rules": {
+      "hit": "Dealer hits soft 17",
+      "stand": "Dealer must draw to 16 and stand on all 17s"
+    },
+    "house-payout": {
+      "3to2": "House pays 3 to 2",
+      "6to5": "House pays 6 to 5"
+    }
+  } 
 }

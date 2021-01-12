@@ -1,14 +1,17 @@
 import { Magic } from 'magic-sdk'
+import { findPlayerByEmail } from './players'
+
 const magic = new Magic(process.env.REACT_APP_PK_KEY)
 
 export const checkUser = async cb => {
   const isLoggedIn = await magic.user.isLoggedIn()
   if (isLoggedIn) {
-    const user = await magic.user.getMetadata()
-    console.log(user)
-    return cb({ isLoggedIn, email: user.email })
+    const { email } = await magic.user.getMetadata()
+    const did = await magic.user.getIdToken()
+    const player = await findPlayerByEmail(email, did)
+    return cb({ isLoggedIn, did, player })
   }
-  return cb({ isLoggedIn })
+  return cb({ isLoggedIn, did: null, player: null })
 }
 
 export const loginUser = async email => {

@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import createApp from './App'
 import './i18n'
 import theme from './theme'
+import './index.css'
 
 const App = createApp(React)
 
