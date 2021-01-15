@@ -12,29 +12,25 @@ import ProtectedRoute from './router/ProtectedRoute'
 import createTablePage from './components/pages/Table'
 import { checkUser } from './services/magic'
 import createHeader from './components/header/Header'
-import createHeaderMenu from './components/header/Menu'
 
 const createApp = React => () => {
-  const [user, setUser] = useState({ isLoggedIn: false, did: null, player: null })
+  const [user, setUser] = useState({ isLoggedIn: false, did: null, player: null, table: null })
   useEffect(() => {
-    const validateUser = async () => {
+    (async () => {
       try {
-        await checkUser(setUser)
+        await checkUser(user.isLoggedIn, setUser)
       } catch (error) {
         console.log(error)
       }
-    }
-    validateUser()
+    })()
   }, [user.isLoggedIn])
   const Header = createHeader()
-  const HeaderMenu = createHeaderMenu()
   return (
     <AuthStateContext.Provider value={user}>
       <AuthDispatchContext.Provider value={setUser}>
         <Router>
           <Container maxWidth={false}>
             <Header isLoggedIn={user.isLoggedIn} />
-            <HeaderMenu isLoggedIn={user.isLoggedIn} email={user.player?.email} />
             {user.isLoggedIn && <Redirect to={{ pathname: '/table' }} />}
             <Switch>
               <Route exact path="/" component={createHomePage()} />

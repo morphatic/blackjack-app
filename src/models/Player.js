@@ -1,7 +1,7 @@
 
 const defaultPreferences = {
   rules: {
-    seats: 5,
+    seats: 1,
     decks: 6,
     minBet: 5,
     maxBet: 2000,
@@ -18,28 +18,24 @@ const defaultPreferences = {
     fiveCardCharlieWins: false,
     insuranceAvailable: true,
     secondsAllowedPerAction: 30,
+    canOnlyHitOnceAfterAceSplit: true,
   },
   deckColor: 'red',
   playWithRobots: false,
 }
 
 export const createPlayer = ({
-  _id = null,
   email = '',
   name = '',
   chips = 0,
   history = [],
   preferences = defaultPreferences,
-  createdAt = '',
-  updatedAt = '',
+  ...args
 } = {}) => ({
-  _id,
   email,
   name,
   chips,
   history,
   preferences,
-  createdAt,
-  updatedAt,
-  isLoggedIn: !!_id
+  ...args
 })

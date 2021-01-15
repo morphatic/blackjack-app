@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     position: 'absolute',
     top: '20px',
     right: '25px',
+    zIndex: '5000',
     '& .MuiButtonBase-root': {
       marginLeft: '5px',
     },

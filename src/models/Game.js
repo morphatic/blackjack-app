@@ -1,6 +1,5 @@
-
 export const defaultRules = {
-  seats: 5,
+  seats: 1,
   decks: 6,
   minBet: 5,
   maxBet: 2000,
@@ -17,30 +16,24 @@ export const defaultRules = {
   fiveCardCharlieWins: false,
   insuranceAvailable: true,
   secondsAllowedPerAction: 30,
+  canOnlyHitOnceAfterAceSplit: true,
 }
 
-export const createGame = ({
-  _id = null,
+export const createGame = params => ({
   rules = defaultRules,
-  deckColor = 'red',
   hands = [],
   dealerCards = [],
   table = null,
   currentHand = 0,
-  createdAt = null,
-  updatedAt = null,
+  ...args
 } = {}) => ({
-  _id,
   rules,
-  deckColor,
   hands,
   dealerCards,
   table,
   currentHand,
-  createdAt,
-  updatedAt,
-
-  start: () => {
-
-  }
+  ...args,
+  isComplete() { return this.hands.every(h => h.isClosed()) },
+  raw() { return JSON.parse(JSON.stringify(this)) },
+  inProgress() { return this.hands.length !== 0 && !this.isComplete() },
 })

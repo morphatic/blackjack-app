@@ -1,13 +1,17 @@
 import { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import isEqual from 'lodash/fp/isEqual'
 import { Box, CardMedia, Container } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles'
-import { GameStateContext } from '../../contexts/GameContext'
+// import { GameStateContext } from '../../contexts/GameContext'
 import createDealerRules from './DealerRules'
 import insurance from '../../assets/Insurance.svg'
+import { GameDispatchContext, GameStateContext } from '../../contexts/GameContext'
 
 const iar = 307/895 // insurance banner aspect ratio
 const iw = 65 // insurance banner width
+
+const Seat = props => (<div ref={props.p} id={props.id} style={props.style}></div>)
 
 const getCoords = ({ n, a, r }) => [...Array(n)].map((e, i) => {
   const deg = (90 - (a / 2)) + ((a / (n + 1)) * (i + 1))
@@ -32,6 +36,7 @@ const getStyle = ({ h, b, c, w,  x, y, t }) => ({
 })
 
 const getSeats = ({
+  p = null, // ref that will allow us to get the position and store it in the context
   n = 4, // number of seats
   a = 140, // span of arc
   r = 90, // radius from dealer
@@ -40,7 +45,7 @@ const getSeats = ({
   c = '#dba437', // color
   w = 180, // width of shape
 } = {}) => getCoords({ n, a, r })
-  .map((s, i) => (<div key={i} style={getStyle({ h, b, c, w, ...s })}></div>))
+  .map((s, i) => (<Seat key={i} p={p} id={`seat${i}`} style={getStyle({ h, b, c, w, ...s })}></Seat>))
 
 const useStyles = makeStyles({
   root: {
@@ -67,15 +72,32 @@ const useStyles = makeStyles({
   }
 })
 
-const createTableLayout = React => () => {
+const createTableLayout = React => (props) => {
   const { t } = useTranslation()
-  const game = useContext(GameStateContext)
-  const [payout] = useState(game.rules.payoutForBlackjack)
+  const gameMeta = useContext(GameStateContext)
+  const setGameMeta = useContext(GameDispatchContext)
+  const [payout] = useState(props.game.rules.payoutForBlackjack)
   const classes = useStyles()
-  const seats = getSeats({ s: game.rules.seats })
+
+  // call back passed to ref to store seat position data in the game context
+  const p = div => {
+    if (div) {
+      const { positions: oldPositions } = gameMeta
+      const { top, left } = div.getBoundingClientRect()
+      const positions = JSON.parse(JSON.stringify(oldPositions))
+      positions[div.id] = { top, left }
+      if (!isEqual(positions, oldPositions)) {
+        setGameMeta({ ...gameMeta, positions })
+        console.log('setGameMeta called')
+      }
+    }
+  }
+
+  // generate the seats
+  const seats = getSeats({ n: props.game.rules.seats, p })
   const DealerRules = createDealerRules()
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} {...props}>
       <CardMedia
         className={classes.insurance}
         image={insurance}
@@ -84,7 +106,7 @@ const createTableLayout = React => () => {
       <Container className={classes.payout} maxWidth={false}>
         {t(`misc.house-payout.${payout === 1.5 ? '3to2' : '6to5'}`)}
       </Container>
-      <DealerRules />
+      <DealerRules game={props.game} />
       {seats}
     </Box>
   )
