@@ -1,0 +1,92 @@
+.playingCard {
+  background-color: transparent;
+  height: 150px;
+  perspective: 1000px; /* activates 3d effect */
+  width: 225px;
+}
+
+.playingCardInner {
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s;
+}
+
+.playingCard.isFaceUp .playingCardInner {
+  transform: rotateY(180deg);
+}
+
+.playingCardBack, .playingCardFace {
+  background-position: center;
+  background-size: 100% 101%;
+  border-radius: 6%;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+/* card backs */
+.playingCardBack      { z-index: 2; transform: rotateY(0deg); }
+.playingCardBack.blue { background-image: url(./images/blue.svg); }
+.playingCardBack.red  { background-image: url(./images/red.svg); }
+
+.playingCardFace {
+  background-color: #fff;
+  transform: rotateY(180deg);
+}
+
+/* card faces */
+.blank { background-image: none; background-color: white; }
+.ca  { background-image: url(./images/ca.svg); }
+.c2  { background-image: url(./images/c2.svg); }
+.c3  { background-image: url(./images/c3.svg); }
+.c4  { background-image: url(./images/c4.svg); }
+.c5  { background-image: url(./images/c5.svg); }
+.c6  { background-image: url(./images/c6.svg); }
+.c7  { background-image: url(./images/c7.svg); }
+.c8  { background-image: url(./images/c8.svg); }
+.c9  { background-image: url(./images/c9.svg); }
+.c10 { background-image: url(./images/c10.svg); }
+.cj  { background-image: url(./images/cj.svg); }
+.cq  { background-image: url(./images/cq.svg); }
+.ck  { background-image: url(./images/ck.svg); }
+.da  { background-image: url(./images/da.svg); }
+.d2  { background-image: url(./images/d2.svg); }
+.d3  { background-image: url(./images/d3.svg); }
+.d4  { background-image: url(./images/d4.svg); }
+.d5  { background-image: url(./images/d5.svg); }
+.d6  { background-image: url(./images/d6.svg); }
+.d7  { background-image: url(./images/d7.svg); }
+.d8  { background-image: url(./images/d8.svg); }
+.d9  { background-image: url(./images/d9.svg); }
+.d10 { background-image: url(./images/d10.svg); }
+.dj  { background-image: url(./images/dj.svg); }
+.dq  { background-image: url(./images/dq.svg); }
+.dk  { background-image: url(./images/dk.svg); }
+.ha  { background-image: url(./images/ha.svg); }
+.h2  { background-image: url(./images/h2.svg); }
+.h3  { background-image: url(./images/h3.svg); }
+.h4  { background-image: url(./images/h4.svg); }
+.h5  { background-image: url(./images/h5.svg); }
+.h6  { background-image: url(./images/h6.svg); }
+.h7  { background-image: url(./images/h7.svg); }
+.h8  { background-image: url(./images/h8.svg); }
+.h9  { background-image: url(./images/h9.svg); }
+.h10 { background-image: url(./images/h10.svg); }
+.hj  { background-image: url(./images/hj.svg); }
+.hq  { background-image: url(./images/hq.svg); }
+.hk  { background-image: url(./images/hk.svg); }
+.sa  { background-image: url(./images/sa.svg); }
+.s2  { background-image: url(./images/s2.svg); }
+.s3  { background-image: url(./images/s3.svg); }
+.s4  { background-image: url(./images/s4.svg); }
+.s5  { background-image: url(./images/s5.svg); }
+.s6  { background-image: url(./images/s6.svg); }
+.s7  { background-image: url(./images/s7.svg); }
+.s8  { background-image: url(./images/s8.svg); }
+.s9  { background-image: url(./images/s9.svg); }
+.s10 { background-image: url(./images/s10.svg); }
+.sj  { background-image: url(./images/sj.svg); }
+.sq  { background-image: url(./images/sq.svg); }
+.sk  { background-image: url(./images/sk.svg); }

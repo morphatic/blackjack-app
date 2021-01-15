@@ -1,7 +1,8 @@
 import { createContext } from 'react'
-import { createGame } from '../models/Game'
 
-export const defaultGameContext = createGame()
+export const defaultGameContext = {
+  positions: [], // the { top: Npx, left: Mpx } coords of the seats at the table
+}
 
 export const GameStateContext = createContext(defaultGameContext)
 export const GameDispatchContext = createContext()

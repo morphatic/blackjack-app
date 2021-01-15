@@ -11,10 +11,27 @@
       "teaser": "やってみたい？メール住所を入力して始めましょう！"
     },
     "table": {
-      "logout": "ログアウト"
+      "logout": "ログアウト",
+      "start-game": "ゲームを始める"
     }
   },
   "notifications": {
+    "actions-dialog": {
+      "start": "Start Game",
+      "deal": "Deal",
+      "stand": "Stand",
+      "hit": "Hit",
+      "split": "Split",
+      "double-down": "Double Down",
+      "surrender": "Surrender",
+      "insure": "Buy Insurance"
+    },
+    "collect-bet-dialog": {
+      "max": "Maximum",
+      "message": "You can bet up to either the max bet or the number of \"chips\" you have in $5 increments.",
+      "submit": "Submit",
+      "title": "Place Your Bet!"
+    },
     "welcome-dialog": {
       "message": "ご参加いただきありがとうございます！お名前を教えてください。名は大丈夫です-それはテーブルであなたのスポットにラベルを付けることができるようにするためです。",
       "placeholder": "名前",

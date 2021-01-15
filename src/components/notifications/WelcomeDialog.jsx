@@ -9,7 +9,6 @@ import {
   DialogTitle,
   SvgIcon,
   TextField,
-  // Typography
 } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles'
 import { mdiCardsSpade } from '@mdi/js'
@@ -66,7 +65,6 @@ const createWelcomeDialog = React => ({open}) => {
   const [name, setName] = useState(user.player.name)
   const updatePlayerName = async () => {
     const player = await updatePlayer(user.player, { name }, user.did)
-    console.log(player)
     setUser({ ...user, player })
   }
   return (

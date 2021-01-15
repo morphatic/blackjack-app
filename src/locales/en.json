@@ -11,10 +11,31 @@
       "teaser": "Wanna play? Enter your email address to get started!"
     },
     "table": {
-      "logout": "Logout"
+      "chips": "Chips",
+      "current-bet": "Current Bet",
+      "current-total": "Hand Score",
+      "logout": "Logout",
+      "soft": "soft",
+      "start-game": "Start Game"
     }
   },
   "notifications": {
+    "actions-dialog": {
+      "start": "Start Game",
+      "deal": "Deal",
+      "stand": "Stand",
+      "hit": "Hit",
+      "split": "Split",
+      "double-down": "Double Down",
+      "surrender": "Surrender",
+      "insure": "Buy Insurance"
+    },
+    "collect-bet-dialog": {
+      "max": "Maximum",
+      "message": "You can bet up to either the max bet or the number of \"chips\" you have in $5 increments.",
+      "submit": "Submit",
+      "title": "Place Your Bet!"
+    },
     "welcome-dialog": {
       "message": "Thank you for joining! Please let us know your name. First name is fine--it's just so we can label your spot(s) at the table.",
       "placeholder": "your name",
