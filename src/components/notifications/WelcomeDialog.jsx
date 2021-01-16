@@ -15,18 +15,27 @@ import { mdiCardsSpade } from '@mdi/js'
 import { AuthDispatchContext, AuthStateContext } from '../../contexts/AuthContext'
 import { updatePlayer } from '../../services/players'
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    background: 'white',
-    borderRadius: '15px',
-    height: '40vh',
-    width: '60vh',
+const useStyles = makeStyles({
+  root: {
+    '& .MuiPaper-root': {
+      background: 'white',
+      borderRadius: '15px',
+      height: '40vh',
+      width: '60vh',
+    },
+    '& .MuiTypography-root': {
+      color: '#333',
+      fontFamily: 'Raleway, sans-serif',
+      fontSize: '1.5rem',
+    },
   },
   button: {
     backgroundColor: 'black',
     color: 'white',
     fontFamily: 'Raleway, sans-serif',
     fontSize: '2rem',
+    marginBottom: '1rem',
+    marginRight: '1rem',
     paddingLeft: '2.5rem',
     paddingRight: '2.5rem',
     '& .MuiSvgIcon-root': {
@@ -40,14 +49,13 @@ const useStyles = makeStyles(theme => ({
       color: '#fbc02d',
     },
   },
-  text: {
-    color: '#333',
-  },
   textField: {
     justifySelf: 'center',
     backgroundColor: '#fff',
+    border: '1px solid #777',
     borderRadius: '4px',
     margin: '2rem auto',
+    width: '100%',
     '& .MuiInputBase-input': {
       color: '#333',
       fontFamily: 'Raleway, sans-serif',
@@ -55,7 +63,7 @@ const useStyles = makeStyles(theme => ({
       width: '30rem',
     }
   },
-}))
+})
 
 const createWelcomeDialog = React => ({open}) => {
   const { t } = useTranslation()
@@ -64,12 +72,12 @@ const createWelcomeDialog = React => ({open}) => {
   const setUser = useContext(AuthDispatchContext)
   const [name, setName] = useState(user.player.name)
   const updatePlayerName = async () => {
-    const player = await updatePlayer(user.player, { name }, user.did)
-    setUser({ ...user, player })
+    const player = await updatePlayer(user.player, { name }, user.token)
+    setUser(user => ({ ...user, player }))
   }
   return (
     <Dialog
-      className={classes.paper}
+      className={classes.root}
       aria-labelledby="form-dialog-title"
       open={open}
     >

@@ -49,7 +49,7 @@ export const createActionsDialog = React => props => {
   const canSplit = h => h && splits < numberOfSplitsAllowed && h.canSplit(allowSplitsForAll10Cards)
   const canDoubleDown = h => h && isArr(h.cards) && h.cards.length === 2
     && allowableDoubleDownTotals.includes(h.total())
-    && (!h.isSplit() || allowDoublingAfterSplit)
+    && (!h.isSplit || allowDoublingAfterSplit)
   const canSurrender = h => h && isArr(h.cards)
     && h.cards.length === 2
     && ((isEarly && allowEarlySurrender) || (!isEarly && allowLateSurrender))

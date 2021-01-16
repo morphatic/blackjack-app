@@ -6,7 +6,7 @@
     "name": "Morgan Benton",
     "email": "morgan.benton@gmail.com"
   },
-  "homepage": "https://github.com/morphatic/blackjack-app",
+  "homepage": "https://blackjack.test",
   "dependencies": {
     "@feathersjs/feathers": "^4.5.11",
     "@feathersjs/rest-client": "^4.5.11",

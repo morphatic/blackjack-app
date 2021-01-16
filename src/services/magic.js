@@ -11,12 +11,12 @@ export const checkUser = async (oldLoginState, cb) => {
   }
   if (isLoggedIn) {
     const { email } = await magic.user.getMetadata()
-    const did = await magic.user.getIdToken()
-    const player = await findPlayerByEmail(email, did)
-    const table = await findTableByOwner(player._id, did)
-    return cb({ isLoggedIn, did, player, table })
+    const token = await magic.user.getIdToken()
+    const player = await findPlayerByEmail(email, token)
+    const table = await findTableByOwner(player._id, token)
+    return cb({ isLoggedIn, token, player, table })
   }
-  return cb({ isLoggedIn, did: null, player: null })
+  return cb({ isLoggedIn, token: null, player: null })
 }
 
 export const loginUser = async email => {

@@ -14,7 +14,7 @@ import { checkUser } from './services/magic'
 import createHeader from './components/header/Header'
 
 const createApp = React => () => {
-  const [user, setUser] = useState({ isLoggedIn: false, did: null, player: null, table: null })
+  const [user, setUser] = useState({ isLoggedIn: false, token: null, player: null, table: null })
   useEffect(() => {
     (async () => {
       try {
