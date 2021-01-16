@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/morphatic/blackjack-app/static/css/main.c1d87526.chunk.css",
+    "main.js": "/morphatic/blackjack-app/static/js/main.9ca4538f.chunk.js",
+    "main.js.map": "/morphatic/blackjack-app/static/js/main.9ca4538f.chunk.js.map",
+    "runtime-main.js": "/morphatic/blackjack-app/static/js/runtime-main.45a5aab8.js",
+    "runtime-main.js.map": "/morphatic/blackjack-app/static/js/runtime-main.45a5aab8.js.map",
+    "static/js/2.7767a921.chunk.js": "/morphatic/blackjack-app/static/js/2.7767a921.chunk.js",
+    "static/js/2.7767a921.chunk.js.map": "/morphatic/blackjack-app/static/js/2.7767a921.chunk.js.map",
+    "index.html": "/morphatic/blackjack-app/index.html",
+    "static/css/main.c1d87526.chunk.css.map": "/morphatic/blackjack-app/static/css/main.c1d87526.chunk.css.map",
+    "static/js/2.7767a921.chunk.js.LICENSE.txt": "/morphatic/blackjack-app/static/js/2.7767a921.chunk.js.LICENSE.txt",
+    "static/media/Insurance.10eb84cc.svg": "/morphatic/blackjack-app/static/media/Insurance.10eb84cc.svg",
+    "static/media/index.css": "/morphatic/blackjack-app/static/media/alger-webfont.a62432bc.ttf",
+    "static/media/PlayingCard.module.css": "/morphatic/blackjack-app/static/media/sq.e5956ab3.svg",
+    "static/media/felt.a15ab559.png": "/morphatic/blackjack-app/static/media/felt.a15ab559.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.45a5aab8.js",
+    "static/js/2.7767a921.chunk.js",
+    "static/css/main.c1d87526.chunk.css",
+    "static/js/main.9ca4538f.chunk.js"
+  ]
+}

@@ -1,6 +1,6 @@
 import { api } from "../services/api"
 import { createGames } from "../services/games"
-import { createHands, updateHand } from "../services/hands"
+import { createHands } from "../services/hands"
 import { createDeck } from "./Deck"
 import { createGame } from "./Game"
 import { createHand } from "./Hand"
@@ -43,9 +43,6 @@ export const createTable = params => ({
     const hands = await createHands([...Array(player.preferences.rules.seats)].map(h => createHand({ player, bet }).raw()), params)
     // use the decorator to create a new game with these hands
     const game = createGame(params)({ rules: player.preferences.rules, hands: hands.map(h => h._id), table: this._id })
-    // update the hands so that they're associated with the new game
-    const gameHands = await Promise.all(game.hands.map(async h => await updateHand(h, { game: game._id }, params)))
-    console.log(gameHands)
     // submit the game to the API and apply the decorator to the returned result
     return createGames(game.raw(), params)
   },
@@ -80,7 +77,7 @@ export const createTable = params => ({
     game.hands[i].cards = game.hands[i].cards.map((c, i) => game.rules.dealPlayersCardsFaceDown && i <= 1 ? ({ ...c, isFaceUp: false }) : ({ ...c, isFaceUp: true }))
 
     // only the dealer's first card needs to be face up
-    game.dealerCards[0].isFaceUp = true
+    game.dealerCards[0] = theGame.dealerCards[0]
 
     // decorate the hands
     game.hands = game.hands.map(h => createHand(h))

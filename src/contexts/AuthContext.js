@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
 export const defaultAuthContext = {
-  did: null,
+  token: null,
   isLoggedIn: false,
   player: null,
 }

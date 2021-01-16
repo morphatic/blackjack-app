@@ -14,14 +14,14 @@ export const createGames = (game, params) => api.service('games')
 //  * Finds a game by owner.
 //  *
 //  * @param   {string} owner _id of the player to be retrieved
-//  * @param   {string} key   The DID string that authenticates the request
+//  * @param   {string} token The DID token string that authenticates the request
 //  * @returns {object}       An object representing the player requested
 //  */
-// export const findGameByOwner = (owner, key) => {
-//   const params = { query: { owner }, headers: { authorization: `Bearer ${key}` } }
+// export const findGameByOwner = (owner, token) => {
+//   const params = { query: { owner }, headers: { authorization: `Bearer ${token}` } }
 //   return api.service('games')
 //     .find(params)
-//     .then(res => createGame({ headers: { authorization: `Bearer ${key}` } })(res.data[0]))
+//     .then(res => createGame({ headers: { authorization: `Bearer ${token}` } })(res.data[0]))
 // }
 
 export const updateGame = (game, props, params) =>  api.service('games')

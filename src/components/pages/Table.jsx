@@ -6,7 +6,7 @@ import { AuthStateContext } from '../../contexts/AuthContext'
 import { TableDispatchContext, TableStateContext } from '../../contexts/TableContext'
 import createHeaderMenu from '../header/Menu'
 import createWelcomeDialog from '../notifications/WelcomeDialog'
-import createTableLayout from '../misc/TableLayout'
+import createTableGraphics from '../misc/TableGraphics'
 import createCollectBetDialog from '../notifications/CollectBetDialog'
 import { createGame } from '../../models/Game'
 import { updateTable } from '../../services/tables'
@@ -14,7 +14,7 @@ import createActionsDialog from '../notifications/ActionsDialog'
 import createPlayingCard from '../playingCards/PlayingCard'
 import { GameDispatchContext, GameStateContext } from '../../contexts/GameContext'
 
-// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,11 +31,11 @@ const createTablePage = React => () => {
   const { t } = useTranslation()
   const classes = useStyles()
   const authState = useContext(AuthStateContext)
-  const { did, isLoggedIn, player, table: playerTable } = authState
+  const { token, isLoggedIn, player, table: playerTable } = authState
   // const setAuthContext = useContext(AuthDispatchContext)
 
   // state
-  const [params] = useState({ headers: { authorization: `Bearer ${did}` } })
+  const [params] = useState({ headers: { authorization: `Bearer ${token}` } })
   const [table, setTable] = useState(playerTable)
   const [progress, setProgress] = useState('notStarted')
   const [isPlayerTurn, setIsPlayerTurn] = useState(false)
@@ -57,33 +57,43 @@ const createTablePage = React => () => {
     setSplits,
     splits,
   }
-  const [gameMeta, setGameMeta] = useState({ playingCards: [], positions: {} })
+  const [seatPositions, setSeatPositions] = useState({})
+  const [playingCards, setPlayingCards] = useState([])
   
   // components
   const HeaderMenu = createHeaderMenu()
+  const WelcomeDialog = createWelcomeDialog()
   const CollectBetDialog = createCollectBetDialog()
   const ActionsDialog = createActionsDialog()
-  const TableLayout = createTableLayout()
+  const TableGraphics = createTableGraphics()
+
+  // utility functions and variables
+  const cardWidth = 120
+  // TODO: modify this to take into account the angle offset for the hand
+  const cardPosition = (pos, num) => ({
+    position: 'absolute',
+    top: (Math.round(+pos.top) - (num * 20 + 10)) + 'px',
+    left: (Math.round(+pos.left) - (num * 30 + 10)) + 'px',
+  })
+  const dealerCardPosition = num => ({
+    position: 'absolute',
+    top: '14vh',
+    left: `calc(50vw + ${((num - 1) * (cardWidth + 10))}px - 20px)`,
+  })
   
   // effects
   const finishDealerHand = async () => {
     // get dealer's remaining cards
     const theGame = await table.completeDealersHand(game)
     actionProps.dealerCards = theGame.dealerCards
-    const { playingCards } = gameMeta
     // deal them to the table
     for (let i = 2; i < theGame.dealerCards.length; i += 1) {
-      const cardPos = {
-        position: 'absolute',
-        top: '14vh',
-        left: `calc(50vh + ${(i - 1) * 130 + 10}px)`
-      }
-      const props = { ...theGame.dealerCards[i], owner: 'dealer' }
+      const cardPos = dealerCardPosition(i)
+      const props = { ...theGame.dealerCards[i], owner: 'dealer', isFaceUp: true }
       const PlayingCard = createPlayingCard()
-      playingCards.push(<PlayingCard {...props} width={120} style={cardPos} />)
+      setPlayingCards(playingCards => [...playingCards, <PlayingCard key={props._id} {...props} width={120} style={cardPos} />])
+      await sleep(250)
     }
-    const updatedCards = playingCards.map(c => ({ ...c, isFaceUp: true }))            
-    setGameMeta({ ...gameMeta, playingCards: updatedCards })
   }
   /**
    * The "progress" effect is where we figure out the results of the
@@ -113,9 +123,10 @@ const createTablePage = React => () => {
           }
           break
         case 'justHit':
+          console.log(game.hands[0].total())
           // evaluate the results of the hit; if total is now >= 21...
           if (game.hands[0].total() >= 21) {
-            // the round is now over; if you didn't bust...
+            // the round is now over; if you tokenn't bust...
             if (!game.hands[0].isBust()) {
               // dealer has to finish
               await finishDealerHand()
@@ -153,34 +164,17 @@ const createTablePage = React => () => {
     actionProps.dealerCards = theGame.dealerCards
     setGame(theGame)
     // update UI with cards
-    const { positions } = gameMeta
-    const playingCards = []
     for (let i = 0; i < 2; i += 1) {
       for (let j = 0; j < theGame.hands.length + 1; j += 1 ) {
         // generate a playing card component
-        const cardPos = { position: 'absolute' }
         const props = j === theGame.hands.length ? theGame.dealerCards[i] : theGame.hands[j].cards[i]
-        if (j < theGame.hands.length) {
-          // player cards
-          const seat = `seat${j}`
-          cardPos.top = i === 1
-            ? (Math.round(+positions[seat].top) - 50) + 'px'
-            : (Math.round(+positions[seat].top) - 10) + 'px'
-          cardPos.left = i === 1
-          ? (Math.round(+positions[seat].left) - 60) + 'px'
-          : (Math.round(+positions[seat].left) - 10) + 'px'
-        } else {
-          // dealer cards
-          cardPos.top = '14vh'
-          cardPos.left = i === 0 ? 'calc(50vw - 130px)' : 'calc(50vw + 10px)'
-        }
+        const style = j < theGame.hands.length ? cardPosition(seatPositions[`seat${j}`], i) : dealerCardPosition(i) 
         const owner = j === theGame.hands.length ? 'dealer' : theGame.hands[j].player
         const PlayingCard = createPlayingCard()
-        playingCards.push(<PlayingCard {...props} owner={owner} width={120} style={cardPos} />)
-        // await sleep(1000)
+        setPlayingCards(playingCards => [...playingCards, <PlayingCard key={props._id || props} {...props} owner={owner} width={120} style={style} />])
+        await sleep(250)
       }
     }
-    setGameMeta({ ...gameMeta, playingCards })
     setProgress('cardsDealt')
     console.log('cardsDealt')
   }
@@ -190,20 +184,17 @@ const createTablePage = React => () => {
     // update the game state
     setGame(theGame)
     // get the card that was just dealt (last one in the array)
-    const card = theGame.hands[0].cards.slice(-1)
+    const props = theGame.hands[0].cards.slice(-1)[0]
     const num = theGame.hands[0].cards.length
+    console.log(props, num)
     // get and set position info
-    const { playingCards, positions } = gameMeta
-    const style = { 
-      position: 'absolute',
-      top: (Math.round(+positions['seat0'].top - ((num - 1) * 40 + 10))) + 'px',
-      left: (Math.round(+positions['seat0'].top - ((num - 1) * 50 + 10))) + 'px'
-    }
+    const style = cardPosition(seatPositions['seat0'], theGame.hands[0].cards.length - 1)
+    console.log(style)
     const owner = theGame.hands[0].player
     const PlayingCard = createPlayingCard()
-    playingCards.push(<PlayingCard { ...card } owner={owner} width={120} style={style} />)
-    setGameMeta({ ...gameMeta, playingCards })
+    setPlayingCards(playingCards => [...playingCards, <PlayingCard key={props._id} { ...props } owner={owner} width={120} style={style} />])
     setProgress('justHit')
+    setAction('reset')
     console.log('justHit')
   }
   useEffect(() => {
@@ -224,7 +215,7 @@ const createTablePage = React => () => {
         case 'insure':
           break
         default:
-          // hi
+          console.log(action)
       }
     })()
   }, [action]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -234,13 +225,13 @@ const createTablePage = React => () => {
         <HeaderMenu isLoggedIn={isLoggedIn} email={player.email} />
         <Paper className={classes.root} elevation={0}>
           {progress !== 'notStarted' &&
-            <GameStateContext.Provider value={gameMeta}>
-              <GameDispatchContext.Provider value={setGameMeta}>
+            <GameStateContext.Provider value={seatPositions}>
+              <GameDispatchContext.Provider value={setSeatPositions}>
                 <Fade in={progress !== 'notStarted'}>
                   <Box>
-                    <TableLayout game={game} />
+                    <TableGraphics key={'tableGraphics'} game={game} />
                     {/* Play area */}
-                    <div id="gameInfo" style={{
+                    <div key={'gameInfo'} style={{
                       color: '#fff',
                       fontFamily: 'Raleway, sans-serif',
                       fontSize: '1rem',
@@ -252,9 +243,10 @@ const createTablePage = React => () => {
                     }}>
                       {t('pages.table.current-total')}: {game.hands[0].isSoft() && t('pages.table.soft')} {game.hands[0].total() || '--'}<br />
                       {t('pages.table.current-bet')}: ${game.hands[0].bet || '0'}<br />
-                      {t('pages.table.chips')}: ${player.chips}
+                      {t('pages.table.chips')}: ${player.chips}<br /><br />
+                      {player.name}
                     </div>
-                    {gameMeta.playingCards}
+                    {playingCards}
                   </Box>
                 </Fade>
               </GameDispatchContext.Provider>
@@ -262,7 +254,7 @@ const createTablePage = React => () => {
           }
           {/* Dialogs */}
           <ActionsDialog { ...actionProps } />
-          {!player.name && createWelcomeDialog({ open: true })}
+          {!player.name && <WelcomeDialog open={true} />}
           <CollectBetDialog
             open={action === 'collectBet'}
             bet={bet}

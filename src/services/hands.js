@@ -7,11 +7,11 @@ import { createHand } from '../models/Hand'
  *
  * @param   {string} player _id of the player whose hands will be retrieved
  * @param   {string} game   _id of the game for which hands will be retrieved
- * @param   {string} key    The DID string that authenticates the request
+ * @param   {string} token  The DID token string that authenticates the request
  * @returns {object}        An object representing the hand requested
  */
-export const findHandsByPlayerAndGame = (player, game, key) => {
-  const params = { query: { player, game }, headers: { authorization: `Bearer ${key}` } }
+export const findHandsByPlayerAndGame = (player, game, token) => {
+  const params = { query: { player, game }, headers: { authorization: `Bearer ${token}` } }
   return api.service('hands')
     .find(params)
     .then(({ data }) => data.map(h => createHand(h)))
