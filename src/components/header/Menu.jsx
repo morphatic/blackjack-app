@@ -5,6 +5,8 @@ import Gravatar from 'react-gravatar'
 import createIconButton from '../misc/IconButton'
 import { logoutUser } from "../../services/magic"
 import { useHistory } from "react-router-dom"
+import { useContext } from "react"
+import { AuthDispatchContext } from "../../contexts/AuthContext"
 
 const useStyles = makeStyles({
   root: {
@@ -31,9 +33,11 @@ const createHeaderMenu = React => ({ isLoggedIn, email }) => {
   const history = useHistory()
   const classes = useStyles({ isLoggedIn })
   const IconButton = createIconButton()
+  const setUser = useContext(AuthDispatchContext)
   const handleLogout = async () => {
     try {
       await logoutUser()
+      setUser({ isLoggedIn: false, token: null, player: null, table: null })
       history.replace('/')
     } catch (error) {
       // TODO: replace with proper Alert
@@ -58,7 +62,7 @@ const createHeaderMenu = React => ({ isLoggedIn, email }) => {
           email={email || ''}
           rating="pg"
           size={40}
-          style={{ borderRadius: '50%', marginLeft: '15px' }}
+          style={{ borderRadius: '50%', marginLeft: '15px', overflow: 'hidden' }}
         />
       </Box>
     </Fade>

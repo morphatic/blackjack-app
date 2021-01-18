@@ -13,11 +13,11 @@ export const findTableByOwner = (owner, token) => {
   const params = { query: { owner }, headers: { authorization: `Bearer ${token}` } }
   return api.service('tables')
     .find(params)
-    .then(res => createTable({ headers: { authorization: `Bearer ${token}` } })(res.data[0]))
+    .then(res => createTable(res.data[0]))
 }
 
 export const updateTable = (table, props, params) =>  api.service('tables')
     .patch(table._id, props, params)
     .then(t => api.service('tables').get(t._id, { ...params, query: { $populate: 'games' } }))
-    .then(t => createTable(params)(t))
+    .then(t => createTable(t))
     // .then(t => { console.log(t); return t })

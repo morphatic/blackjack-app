@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Box, makeStyles } from "@material-ui/core"
-// import { GameStateContext } from "../../contexts/GameContext"
 
 const drw = 50 // dealer rules text
 
@@ -17,7 +16,6 @@ const useStyles = makeStyles({
 
 const createDealerRules = React => ({ game }) => {
   const { t } = useTranslation()
-  // const game = useContext(GameStateContext)
   const [rule] = useState(game.rules.dealerStandsOnSoft17)
   const classes = useStyles()
   return (

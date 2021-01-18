@@ -25,6 +25,7 @@ const createAlert =  React => {
           }
           severity={severity}
           variant="filled"
+          style={{ zIndex: '2000', position: 'absolute', top: '50vh' }}
         >
           <AlertTitle>{title}</AlertTitle>
           {alert}

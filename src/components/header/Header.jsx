@@ -21,9 +21,10 @@ const useStyles = makeStyles({
   },
   title: {
     fontFamily: '"Algerian", cursive',
-    fontSize: ({ isLoggedIn }) => isLoggedIn ? '3rem' : '6.5rem',
+    fontSize: ({ isLoggedIn }) => isLoggedIn ? '4rem' : '10rem',
     fontWeight: 'normal',
-    marginBottom: '0',
+    marginBottom: ({ isLoggedIn }) => isLoggedIn ? '-12px' : '0',
+    marginTop: '0',
     transition: 'font-size .5s ease-in-out',
   }
 })

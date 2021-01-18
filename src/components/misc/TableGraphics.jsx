@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import isEqual from 'lodash/fp/isEqual'
 import { Box, CardMedia, Container } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles'
-// import { GameStateContext } from '../../contexts/GameContext'
 import createDealerRules from './DealerRules'
 import insurance from '../../assets/Insurance.svg'
-import { GameDispatchContext, GameStateContext } from '../../contexts/GameContext'
 
 const iar = 307/895 // insurance banner aspect ratio
 const iw = 65 // insurance banner width
@@ -74,20 +72,18 @@ const useStyles = makeStyles({
 
 const createTableGraphics = React => (props) => {
   const { t } = useTranslation()
-  const seatPositions = useContext(GameStateContext)
-  const setSeatPositions = useContext(GameDispatchContext)
+  const { seatPositions, setSeatPositions } = props
   const [payout] = useState(props.game.rules.payoutForBlackjack)
   const classes = useStyles()
 
   // call back passed to ref to store seat position data in the game context
   const p = div => {
     if (div) {
-      const { top, left } = div.getBoundingClientRect()
-      const positions = JSON.parse(JSON.stringify(seatPositions))
-      positions[div.id] = { top, left }
-      if (!isEqual(positions, seatPositions)) {
-        setSeatPositions(positions)
-        console.log('setGameMeta called')
+      const { left, top } = div.getBoundingClientRect()
+      const { transform } = div.style
+      const newPositions = { ...seatPositions, [div.id]: { left, top, transform } }
+      if (!isEqual(newPositions, seatPositions)) {
+        setSeatPositions({ ...seatPositions, ...newPositions })
       }
     }
   }
@@ -96,7 +92,7 @@ const createTableGraphics = React => (props) => {
   const seats = getSeats({ n: props.game.rules.seats, p })
   const DealerRules = createDealerRules()
   return (
-    <Box className={classes.root} {...props}>
+    <Box className={classes.root}>
       <CardMedia
         className={classes.insurance}
         image={insurance}

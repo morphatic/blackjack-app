@@ -15,6 +15,7 @@
       "current-bet": "Current Bet",
       "current-total": "Hand Score",
       "logout": "Logout",
+      "result": "The Result",
       "soft": "soft",
       "start-game": "Start Game"
     }
@@ -28,7 +29,8 @@
       "split": "Split",
       "double-down": "Double Down",
       "surrender": "Surrender",
-      "insure": "Buy Insurance"
+      "insure": "Buy Insurance",
+      "clean-up": "Clean Up"
     },
     "collect-bet-dialog": {
       "max": "Maximum",

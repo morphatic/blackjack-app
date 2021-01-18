@@ -25,6 +25,7 @@ const defaultPreferences = {
 }
 
 export const createPlayer = ({
+  _id = '',
   email = '',
   name = '',
   chips = 0,
@@ -32,6 +33,7 @@ export const createPlayer = ({
   preferences = defaultPreferences,
   ...args
 } = {}) => ({
+  _id,
   email,
   name,
   chips,

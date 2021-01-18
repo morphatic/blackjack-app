@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Paper, SvgIcon, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { mdiCardsSpade } from '@mdi/js'
 import { useTranslation } from 'react-i18next'
-import { loginUser } from '../../services/magic'
+import { checkUser, loginUser } from '../../services/magic'
 import createAlert from '../notifications/Alert'
+import { AuthDispatchContext, AuthStateContext } from '../../contexts/AuthContext'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,6 +68,8 @@ const useStyles = makeStyles(theme => ({
 
 const createHomePage = React => () => {
   const { t } = useTranslation()
+  const user = useContext(AuthStateContext)
+  const setUser = useContext(AuthDispatchContext)
   const classes = useStyles()
   const [email, setEmail] = useState('')
   const [alert, setAlert] = useState('')
@@ -82,8 +85,10 @@ const createHomePage = React => () => {
     try {
       setAlert('')
       await loginUser(email)
-      history.replace('/table')
+      await checkUser(user.isLoggedIn, setUser)
+      history.push('/table')
     } catch (error) {
+      console.log('Something wrong. Not logging in.')
       setAlert(error.message)
     } 
   }

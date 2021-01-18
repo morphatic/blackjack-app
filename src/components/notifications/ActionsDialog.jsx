@@ -43,30 +43,32 @@ export const createActionsDialog = React => props => {
 
   // check conditions
   const isArr = v => Array.isArray(v)
-  const canDeal = h => h && isArr(h.cards) && h.cards.length === 0
-  const canStand = h => h && isArr(h.cards) && h.cards.length >= 2
-  const canHit = h => h && isArr(h.cards) && h.cards.length >= 2 && h.total() < 21
+  const canStand = h => h && isArr(h.cards) && h.cards.length >= 2 && !['settled', 'notStarted', 'cleanup'].includes(progress)
+  const canHit = h => h && isArr(h.cards) && h.cards.length >= 2 && h.total() < 21 && !['settled', 'notStarted', 'cleanup'].includes(progress)
   const canSplit = h => h && splits < numberOfSplitsAllowed && h.canSplit(allowSplitsForAll10Cards)
   const canDoubleDown = h => h && isArr(h.cards) && h.cards.length === 2
     && allowableDoubleDownTotals.includes(h.total())
     && (!h.isSplit || allowDoublingAfterSplit)
+    && !['settled', 'notStarted', 'cleanup', 'doubled'].includes(progress)
   const canSurrender = h => h && isArr(h.cards)
     && h.cards.length === 2
     && ((isEarly && allowEarlySurrender) || (!isEarly && allowLateSurrender))
+    && !['settled', 'notStarted', 'cleanup'].includes(progress)
   const canInsure = (h, dc) => h && isArr(h.cards)
     && h.cards.length === 2
     && insuranceAvailable
     && ['10', 'j', 'q', 'k', 'a'].includes(dc[0].rank)
+    && !['settled', 'notStarted', 'cleanup'].includes(progress)
 
   // create buttons
-  const StartButton = createButton()
-  const DealButton = createButton()
-  const StandButton = createButton()
-  const HitButton = createButton()
-  const SplitButton = createButton()
+  const StartButton      = createButton()
+  const StandButton      = createButton()
+  const HitButton        = createButton()
+  const SplitButton      = createButton()
   const DoubleDownButton = createButton()
-  const SurrenderButton = createButton()
-  const InsureButton = createButton()
+  const SurrenderButton  = createButton()
+  const InsureButton     = createButton()
+  const CleanUpButton    = createButton()
 
   // return component
   return (
@@ -82,18 +84,13 @@ export const createActionsDialog = React => props => {
     >
       <DialogContent>
         {progress === 'notStarted' &&
-          <StartButton onClick={() => { setBet(minBet); setAction('collectBet')}}>
+          <StartButton onClick={() => { setBet(minBet); setAction('bet')}}>
             {t('notifications.actions-dialog.start')}
           </StartButton>
         }
-        {canDeal(hand) &&
-          <DealButton onClick={() => setAction('deal')}>
-            {t('notifications.actions-dialog.deal')}
-          </DealButton>
-        }
         {canStand(hand) &&
           <StandButton onClick={() => setAction('stand')}>
-            {t('notifications.actions-dialog.stand')}
+            {hand.total() <= 21 ? t('notifications.actions-dialog.stand') : 'Bust!'}
           </StandButton>
         }
         {canHit(hand) &&
@@ -107,7 +104,7 @@ export const createActionsDialog = React => props => {
           </SplitButton>
         }
         {canDoubleDown(hand) &&
-          <DoubleDownButton onClick={() => setAction('doubleDown')}>
+          <DoubleDownButton onClick={() => setAction('double')}>
             {t('notifications.actions-dialog.double-down')}
           </DoubleDownButton>
         }
@@ -120,6 +117,11 @@ export const createActionsDialog = React => props => {
           <InsureButton onClick={() => setAction('insure')}>
             {t('notifications.actions-dialog.insure')}
           </InsureButton>
+        }
+        {progress === 'settled' &&
+          <CleanUpButton onClick={() => setAction('cleanup')}>
+            {t('notifications.actions-dialog.clean-up')}
+          </CleanUpButton>
         }
       </DialogContent>
     </Dialog>

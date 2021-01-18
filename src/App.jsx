@@ -4,7 +4,7 @@ import {
   BrowserRouter as Router,
   Redirect,
   Route,
-  Switch
+  Switch,
 } from 'react-router-dom'
 import { AuthDispatchContext, AuthStateContext } from './contexts/AuthContext'
 import createHomePage from './components/pages/Home'
@@ -15,6 +15,9 @@ import createHeader from './components/header/Header'
 
 const createApp = React => () => {
   const [user, setUser] = useState({ isLoggedIn: false, token: null, player: null, table: null })
+  const HomePage = createHomePage()
+  const TablePage = createTablePage()
+  const Header = createHeader()
   useEffect(() => {
     (async () => {
       try {
@@ -24,7 +27,6 @@ const createApp = React => () => {
       }
     })()
   }, [user.isLoggedIn])
-  const Header = createHeader()
   return (
     <AuthStateContext.Provider value={user}>
       <AuthDispatchContext.Provider value={setUser}>
@@ -33,8 +35,8 @@ const createApp = React => () => {
             <Header isLoggedIn={user.isLoggedIn} />
             {user.isLoggedIn && <Redirect to={{ pathname: '/table' }} />}
             <Switch>
-              <Route exact path="/" component={createHomePage()} />
-              <ProtectedRoute path="/table" component={createTablePage()} />
+              <Route exact path="/" component={HomePage} />
+              <ProtectedRoute path="/table" component={TablePage} />
             </Switch>
           </Container>
         </Router>

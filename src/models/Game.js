@@ -19,12 +19,13 @@ export const defaultRules = {
   canOnlyHitOnceAfterAceSplit: true,
 }
 
-export const createGame = params => ({
+export const createGame = ({
   rules = defaultRules,
   hands = [],
   dealerCards = [],
   table = null,
   currentHand = 0,
+  state = 'notStarted',
   ...args
 } = {}) => ({
   rules,
@@ -32,6 +33,7 @@ export const createGame = params => ({
   dealerCards,
   table,
   currentHand,
+  state,
   ...args,
   isComplete() { return this.hands.every(h => h.isClosed()) },
   raw() { return JSON.parse(JSON.stringify(this)) },
