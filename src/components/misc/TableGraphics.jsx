@@ -45,13 +45,34 @@ const getSeats = ({
 } = {}) => getCoords({ n, a, r })
   .map((s, i) => (<Seat key={`seat${i}`} p={p} id={`seat${i}`} style={getStyle({ h, b, c, w, ...s })}></Seat>))
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ currentSeat }) => ({
   root: {
     height: '100vh',
     left: '0',
     position: 'absolute',
     top: '0',
     width: '100vw',
+    // '& #seat0': {
+    //   boxShadow: currentSeat === 0 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
+    // '& #seat1': {
+    //   boxShadow: currentSeat === 1 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
+    // '& #seat2': {
+    //   boxShadow: currentSeat === 2 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
+    // '& #seat3': {
+    //   boxShadow: currentSeat === 3 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
+    // '& #seat4': {
+    //   boxShadow: currentSeat === 4 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
+    // '& #seat5': {
+    //   boxShadow: currentSeat === 5 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
+    // '& #seat6': {
+    //   boxShadow: currentSeat === 6 ? '0 0 38px rgba(219, 164, 55, 0.8)' : 'none',
+    // },
   },
   insurance: {
     position: 'absolute',
@@ -67,15 +88,15 @@ const useStyles = makeStyles({
     position: 'absolute',
     textAlign: 'center',
     top: '33vh',
-  }
-})
+  },
+}))
 
 const createTableGraphics = React => (props) => {
   const { t } = useTranslation()
-  const { seatPositions, setSeatPositions } = props
+  const { currentSeat, seatPositions, setSeatPositions } = props
   const [payout] = useState(props.game.rules.payoutForBlackjack)
-  const classes = useStyles()
-
+  const classes = useStyles({ currentSeat })
+  // console.log('tableGraphics:', currentSeat)
   // call back passed to ref to store seat position data in the game context
   const p = div => {
     if (div) {

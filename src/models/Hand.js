@@ -61,6 +61,7 @@ export const createHand = ({
   payout = 0,
   player = null,
   result = undefined,
+  seat = 0,
   splitFromAceOrTen = false,
   surrendered = false,
   ...args
@@ -73,6 +74,7 @@ export const createHand = ({
   isSplit,
   player,
   result,
+  seat,
   splitFromAceOrTen,
   ...args,
   raw() { return JSON.parse(JSON.stringify(this)) },
