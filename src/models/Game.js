@@ -25,6 +25,8 @@ export const createGame = ({
   dealerCards = [],
   table = null,
   currentHand = 0,
+  currentSeat = 0,
+  seats = 0,
   state = 'notStarted',
   ...args
 } = {}) => ({
@@ -33,6 +35,7 @@ export const createGame = ({
   dealerCards,
   table,
   currentHand,
+  currentSeat,
   state,
   ...args,
   isComplete() { return this.hands.every(h => h.isClosed()) },

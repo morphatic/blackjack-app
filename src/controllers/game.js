@@ -23,7 +23,7 @@ export const gameController = params => ({
    * Starts a new game.
    *
    * @param   {Player}   playerId The id of the player starting the game
-   * @param   {number[]} bets     The amount(s) the player has decided to bet for this game
+   * @param   {number[]} bets     The amount(s) the player has decided to bet for this game (also determines number of seats)
    * @param   {object}   rules    (Optional) A set of rules for the game different than those for the player
    * @returns {Game}              The Game object that was created
    */
@@ -69,9 +69,9 @@ export const gameController = params => ({
       // tell the server we'd like to move to the next hand
       const game = await api.service('game').update(theGame._id, { action: 'advance' }, params)
   
-      // update the game with the next current hand
+      // update the game with the next current hand and seat
       theGame.currentHand = game.currentHand
-      console.log('theGame.hands', theGame.hands, 'game.hands', game.hands)
+      theGame.currentSeat = game.currentSeat
 
       // if the game was finished
       if (game.state === 'finished') {

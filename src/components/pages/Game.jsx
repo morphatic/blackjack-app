@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const createGamePage = React => ({ game, playingCards, seatPositions, setSeatPositions }) => {
+const createGamePage = React => ({ game, playingCards, currentSeat, seatPositions, setSeatPositions }) => {
   const classes = useStyles()
 
   // components
@@ -25,7 +25,7 @@ const createGamePage = React => ({ game, playingCards, seatPositions, setSeatPos
   // The actual Table component
   return (
     <Paper className={classes.root} elevation={0}>
-      <TableGraphics game={game} seatPositions={seatPositions} setSeatPositions={setSeatPositions} />
+      <TableGraphics game={game} currentSeat={currentSeat} seatPositions={seatPositions} setSeatPositions={setSeatPositions} />
       <HandInfo hands={game.hands} seatPositions={seatPositions} />
     </Paper>
   )

@@ -38,7 +38,7 @@ export const createTablePage = React => props => {
   const [isPlayerTurn, setIsPlayerTurn] = useState(true)
   const [params] = useState({ headers: { authorization: `Bearer ${token}` } })
   const [playingCards, setPlayingCards] = useState([])
-  const [result, setResult] = useState({ message: '', severity: '' })
+  const [result, setResult] = useState({ message: '', severity: 'success' })
   const [seatPositions, setSeatPositions] = useState({})
   const [splits, setSplits] = useState(0)
   const [actionProps, setActionProps] = useState({
@@ -83,7 +83,8 @@ export const createTablePage = React => props => {
   /**
    * The startGame() method runs AFTER controller.start() has returned
    * and update the game state. It causes the initial deal to be updated
-   * on the screen
+   * on the screen. At the start of the game there will only be one hand
+   * per seat at the table, i.e. no splits have yet occurred
    */
   const startGame = async () => {
     // make sure player action options are updated
@@ -96,7 +97,7 @@ export const createTablePage = React => props => {
       for (let j = 0; j <= game.hands.length; j += 1 ) {
         // generate a playing card component
         const props = j === game.hands.length ? game.dealerCards[i] : game.hands[j].cards[i]
-        const style = j < game.hands.length ? cardPosition(seatPositions[`seat${j}`], i) : dealerCardPosition(i) 
+        const style = j < game.hands.length ? cardPosition(seatPositions[`seat${game.hands[j].seat}`], i) : dealerCardPosition(i) 
         const owner = j === game.hands.length ? 'dealer' : game.hands[j].player._id
         const PlayingCard = createPlayingCard()
         setPlayingCards(playingCards => [
@@ -118,6 +119,7 @@ export const createTablePage = React => props => {
     const hand = game.hands[game.currentHand]
     const dealerCards = game.dealerCards
     setActionProps(actionProps => ({ ...actionProps, hand, dealerCards, }))
+    gameProps.currentSeat = game.currentSeat
     if (game.currentHand >= game.hands.length) {
       // everyone has played their hand
       game.state = 'finished'
@@ -142,10 +144,16 @@ export const createTablePage = React => props => {
     const props = game.hands[game.currentHand].cards.slice(-1)[0]
     // get and set position info
     let style
-    if (hand.isSplit && game.currentHand === 0) {
-      style = splitCardPosition(seatPositions[`seat${game.currentHand}`], game.hands[game.currentHand].cards.length - 1)
-    } else {
-      style = cardPosition(seatPositions[`seat${game.currentHand}`], game.hands[game.currentHand].cards.length - 1)
+    // get the all the hands just at the current seat and the index of the current hand within those
+    const seatHands = game.hands.filter(h => h.seat === game.currentSeat)
+    const seats = seatHands.length
+    const handIndex = seatHands.findIndex(h => h._id === hand._id)
+    // determine the position of the card to be dealt based on the number of hands at the seat and the hand index
+    if (seats === 1 || (seats === 2 && handIndex === 1)) {
+      // default position
+      style = cardPosition(seatPositions[`seat${game.currentSeat}`], game.hands[game.currentHand].cards.length - 1)
+    } else if (seatHands.length === 2) {
+      style = splitCardPosition(seatPositions[`seat${game.currentSeat}`], game.hands[game.currentHand].cards.length - 1)
     }
     const owner = game.hands[game.currentHand].player._id
     const PlayingCard = createPlayingCard()
@@ -322,7 +330,7 @@ export const createTablePage = React => props => {
     // remove all the cards
     setPlayingCards(playingCards => [])
     setAction('')
-    setResult({ message: '', severity: '' })
+    setResult({ message: '', severity: 'success' })
     game.state = 'notStarted'
   }
 
@@ -395,7 +403,7 @@ export const createTablePage = React => props => {
   const ResultsAlert = createAlert()
   const WelcomeDialog = createWelcomeDialog()       // welcome dialog; only on first login
 
-  const gameProps = { game, playingCards, seatPositions, setSeatPositions }
+  const gameProps = { game, playingCards, currentSeat: game.currentSeat, seatPositions, setSeatPositions }
 
   return (
     <Box>
